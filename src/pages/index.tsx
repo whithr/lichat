@@ -31,6 +31,11 @@ export default function App() {
     return () => subscription.unsubscribe();
   }, []);
 
+  const signOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    console.log(error);
+  };
+
   if (!session) {
     return (
       <div className="m-auto w-1/3">
@@ -38,7 +43,11 @@ export default function App() {
       </div>
     );
   } else {
-    return <div>Logged in!</div>;
+    return (
+      <div>
+        Logged in! <button onClick={signOut}>Sign out</button>
+      </div>
+    );
   }
 }
 
