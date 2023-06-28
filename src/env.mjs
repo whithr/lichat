@@ -8,8 +8,8 @@ export const env = createEnv({
    */
   server: {
     NODE_ENV: z.enum(["development", "test", "production"]),
-    DATABASE_URL: z.string().url(),
-    DIRECT_URL: z.string().url(),
+    // DATABASE_URL: z.string().url(),
+    // DIRECT_URL: z.string().url(),
   },
 
   /**
@@ -28,8 +28,8 @@ export const env = createEnv({
    */
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
-    DATABASE_URL: process.env.DATABASE_URL,
-    DIRECT_URL: process.env.DIRECT_URL,
+    // DATABASE_URL: process.env.DATABASE_URL,
+    // DIRECT_URL: process.env.DIRECT_URL,
     NEXT_PUBLIC_DATABASE_REST_URL: process.env.NEXT_PUBLIC_DATABASE_REST_URL,
     NEXT_PUBLIC_DATABASE_ANON_KEY: process.env.NEXT_PUBLIC_DATABASE_ANON_KEY,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,

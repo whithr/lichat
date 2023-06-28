@@ -3,10 +3,9 @@ import { type Session, createClient } from "@supabase/supabase-js";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { env } from "../env.mjs";
+import { Database } from "~/database.types";
 
-console.log(env);
-
-const supabase = createClient(
+const supabase = createClient<Database>(
   env.NEXT_PUBLIC_DATABASE_REST_URL ?? "",
   env.NEXT_PUBLIC_DATABASE_ANON_KEY ?? ""
 );
