@@ -1,20 +1,18 @@
-"use client";
+'use client';
 
-// import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { useRouter } from "next/navigation";
-import { useClientSession } from "~/hooks/useClientSession";
-import supabase from "~/lib/supabaseBrowser";
+import { useRouter } from 'next/navigation';
+import { useClientSession } from '../hooks/useClientSession';
+import supabase from '../lib/supabaseBrowser';
 
 export const Login = () => {
   const router = useRouter();
 
   const { session } = useClientSession();
-  console.log(session);
 
   const handleSignUp = async () => {
     await supabase.auth.signUp({
-      email: "haleyrhyswhitman@gmail.com",
-      password: "camel123",
+      email: 'test@gmail.com',
+      password: 'test123',
       options: {
         emailRedirectTo: `${location.origin}/auth/callback`,
       },
@@ -24,8 +22,8 @@ export const Login = () => {
 
   const handleSignIn = async () => {
     await supabase.auth.signInWithPassword({
-      email: "haleyrhyswhitman@gmail.com",
-      password: "camel123",
+      email: 'test@gmail.com',
+      password: 'test123',
     });
     router.refresh();
   };
@@ -35,10 +33,8 @@ export const Login = () => {
     router.refresh();
   };
 
-  //   console.log(session);
-
   return (
-    <div className="flex gap-2">
+    <div className='flex gap-2 bg-slate-500'>
       {!session ? (
         <>
           <button onClick={handleSignUp}>Sign up</button>
