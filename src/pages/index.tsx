@@ -1,53 +1,40 @@
-import { useState, useEffect } from "react";
-import { type Session, createClient } from "@supabase/supabase-js";
-import { Auth } from "@supabase/auth-ui-react";
-import { ThemeSupa } from "@supabase/auth-ui-shared";
-import { env } from "../env.mjs";
-import { Database } from "~/database.types";
-
-const supabase = createClient<Database>(
-  env.NEXT_PUBLIC_DATABASE_REST_URL ?? "",
-  env.NEXT_PUBLIC_DATABASE_ANON_KEY ?? ""
-);
+import { Login } from "~/app/Login";
+import { Users } from "~/app/client/page";
 
 export default function App() {
-  const [session, setSession] = useState<Session | null>();
+  return (
+    <>
+      <Login />
+      <Users />
+    </>
+    // <AuthProvider>
+    //   {user ? (
+    //     <>
+    //       hello {user?.email}
+    //       <button onClick={signOut}>Sign out</button>
+    //     </>
+    //   ) : (
+    //     <>
+    //       {/* // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
+    //       <Auth supabaseClient={supaClient} appearance={{ theme: ThemeSupa }} />
+    //     </>
+    //   )}
+    // </AuthProvider>
+  );
 
-  useEffect(() => {
-    supabase.auth
-      .getSession()
-      .then(({ data: { session } }) => {
-        setSession(session);
-      })
-      .catch((err) => console.log(err));
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
-  const signOut = async () => {
-    const { error } = await supabase.auth.signOut();
-    console.log(error);
-  };
-
-  if (!session) {
-    return (
-      <div className="m-auto w-1/3">
-        <Auth supabaseClient={supabase} appearance={{ theme: ThemeSupa }} />
-      </div>
-    );
-  } else {
-    return (
-      <div>
-        Logged in! <button onClick={signOut}>Sign out</button>
-      </div>
-    );
-  }
+  // if (!session) {
+  //   return (
+  //     <div className="m-auto w-1/3">
+  //       <Auth supabaseClient={supabase} appearance={{ theme: ThemeSupa }} />
+  //     </div>
+  //   );
+  // } else {
+  //   return (
+  //     <div>
+  //       Logged in! <button onClick={signOut}>Sign out</button>
+  //     </div>
+  //   );
+  // }
 }
 
 // import Head from "next/head";
