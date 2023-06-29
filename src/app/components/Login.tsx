@@ -34,7 +34,7 @@ export const Login = () => {
   };
 
   return (
-    <div className='flex gap-2 bg-slate-500'>
+    <div className='flex gap-2'>
       {!session ? (
         <>
           <button onClick={handleSignUp}>Sign up</button>
