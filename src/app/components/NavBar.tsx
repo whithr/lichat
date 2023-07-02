@@ -11,7 +11,7 @@ export const NavBar = async () => {
           <p className='text-sm font-medium'>lichat</p>
         </Link>
         {/* search bar */}
-        <div className='flex gap-1'>
+        <div className='flex gap-1 h-fit'>
           <ThemeModeToggle />
           <UserAccountNav />
         </div>
