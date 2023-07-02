@@ -2,7 +2,7 @@
 
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useEffect, useState } from 'react';
-import type { Database } from '../lib/database.types';
+import type { Database } from '@/lib/database.types';
 
 type User = Database['public']['Tables']['user_profiles']['Row'];
 
