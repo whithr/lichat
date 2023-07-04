@@ -34,37 +34,242 @@ export interface Database {
   };
   public: {
     Tables: {
-      user_profiles: {
+      boards: {
         Row: {
-          user_id: string;
-          username: string;
+          created_by: string;
+          id: number;
+          inserted_at: string;
+          name: string;
         };
         Insert: {
-          user_id: string;
-          username: string;
+          created_by: string;
+          id?: number;
+          inserted_at?: string;
+          name: string;
         };
         Update: {
-          user_id?: string;
-          username?: string;
+          created_by?: string;
+          id?: number;
+          inserted_at?: string;
+          name?: string;
         };
         Relationships: [
           {
-            foreignKeyName: 'user_profiles_user_id_fkey';
+            foreignKeyName: 'boards_created_by_fkey';
+            columns: ['created_by'];
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          }
+        ];
+      };
+      comments: {
+        Row: {
+          content: string | null;
+          downvotes: number | null;
+          id: number;
+          inserted_at: string;
+          parent_comment_id: number | null;
+          post_id: number | null;
+          upvotes: number | null;
+          user_id: string;
+        };
+        Insert: {
+          content?: string | null;
+          downvotes?: number | null;
+          id?: number;
+          inserted_at?: string;
+          parent_comment_id?: number | null;
+          post_id?: number | null;
+          upvotes?: number | null;
+          user_id: string;
+        };
+        Update: {
+          content?: string | null;
+          downvotes?: number | null;
+          id?: number;
+          inserted_at?: string;
+          parent_comment_id?: number | null;
+          post_id?: number | null;
+          upvotes?: number | null;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'comments_parent_comment_id_fkey';
+            columns: ['parent_comment_id'];
+            referencedRelation: 'comments';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'comments_post_id_fkey';
+            columns: ['post_id'];
+            referencedRelation: 'posts';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'comments_user_id_fkey';
             columns: ['user_id'];
             referencedRelation: 'users';
             referencedColumns: ['id'];
           }
         ];
       };
+      posts: {
+        Row: {
+          board_id: number;
+          content: string | null;
+          downvotes: number | null;
+          id: number;
+          inserted_at: string;
+          title: string | null;
+          upvotes: number | null;
+          user_id: string;
+        };
+        Insert: {
+          board_id: number;
+          content?: string | null;
+          downvotes?: number | null;
+          id?: number;
+          inserted_at?: string;
+          title?: string | null;
+          upvotes?: number | null;
+          user_id: string;
+        };
+        Update: {
+          board_id?: number;
+          content?: string | null;
+          downvotes?: number | null;
+          id?: number;
+          inserted_at?: string;
+          title?: string | null;
+          upvotes?: number | null;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'posts_board_id_fkey';
+            columns: ['board_id'];
+            referencedRelation: 'boards';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'posts_user_id_fkey';
+            columns: ['user_id'];
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          }
+        ];
+      };
+      role_permissions: {
+        Row: {
+          id: number;
+          permission: Database['public']['Enums']['app_permission'];
+          role: Database['public']['Enums']['app_role'];
+        };
+        Insert: {
+          id?: number;
+          permission: Database['public']['Enums']['app_permission'];
+          role: Database['public']['Enums']['app_role'];
+        };
+        Update: {
+          id?: number;
+          permission?: Database['public']['Enums']['app_permission'];
+          role?: Database['public']['Enums']['app_role'];
+        };
+        Relationships: [];
+      };
+      subscribers: {
+        Row: {
+          board_id: number;
+          user_id: string;
+        };
+        Insert: {
+          board_id: number;
+          user_id: string;
+        };
+        Update: {
+          board_id?: number;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'subscribers_board_id_fkey';
+            columns: ['board_id'];
+            referencedRelation: 'boards';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'subscribers_user_id_fkey';
+            columns: ['user_id'];
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          }
+        ];
+      };
+      user_roles: {
+        Row: {
+          id: number;
+          role: Database['public']['Enums']['app_role'];
+          user_id: string;
+        };
+        Insert: {
+          id?: number;
+          role: Database['public']['Enums']['app_role'];
+          user_id: string;
+        };
+        Update: {
+          id?: number;
+          role?: Database['public']['Enums']['app_role'];
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'user_roles_user_id_fkey';
+            columns: ['user_id'];
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          }
+        ];
+      };
+      users: {
+        Row: {
+          id: string;
+          status: Database['public']['Enums']['user_status'] | null;
+          username: string | null;
+        };
+        Insert: {
+          id: string;
+          status?: Database['public']['Enums']['user_status'] | null;
+          username?: string | null;
+        };
+        Update: {
+          id?: string;
+          status?: Database['public']['Enums']['user_status'] | null;
+          username?: string | null;
+        };
+        Relationships: [];
+      };
     };
     Views: {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      authorize: {
+        Args: {
+          requested_permission: Database['public']['Enums']['app_permission'];
+          user_id: string;
+        };
+        Returns: boolean;
+      };
     };
     Enums: {
-      [_ in never]: never;
+      app_permission:
+        | 'boards.delete'
+        | 'posts.delete'
+        | 'comments.delete'
+        | 'subscribers.delete';
+      app_role: 'admin' | 'moderator';
+      user_status: 'ONLINE' | 'OFFLINE';
     };
     CompositeTypes: {
       [_ in never]: never;

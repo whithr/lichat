@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import type { ResponseError } from 'superagent';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 
@@ -32,7 +32,11 @@ const formSchema = z.object({
     }),
 });
 
-export const LoginForm = () => {
+type LoginFormProps = {
+  onSuccess: () => void;
+};
+
+export const LoginForm = ({ onSuccess }: LoginFormProps) => {
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -43,21 +47,104 @@ export const LoginForm = () => {
   });
   const { toast } = useToast();
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    try {
-      supabase.auth.signInWithPassword({
-        email: 'test@gmail.com',
-        password: 'test123',
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    await supabase.auth
+      .signInWithPassword({
+        email: values.email,
+        password: values.password,
+      })
+      .then((data) => {
+        if (data.error) {
+          toast({
+            title: 'There was a problem with your login',
+            description: data.error.message,
+            variant: 'destructive',
+          });
+          return;
+        }
+        toast({
+          title: 'You logged in successfully',
+          description: 'welcome to lichat',
+        });
+        router.push('/');
+        onSuccess();
+
+        console.log(data);
       });
-    } catch (error) {
-    } finally {
-      toast({
-        title: 'You logged in successfully',
-        description: 'welcome to lichat',
-      });
-      router.push('/');
-      //   router.refresh();
-    }
+    // try {
+    //   await supabase.auth.signInWithPassword({
+    //     email: values.email,
+    //     password: values.password,
+    //   });
+    // } catch (e) {
+    //   console.error(e);
+    //   toast({
+    //     title: 'There was a problem with your login',
+    //     description: 'Please try again',
+    //     variant: 'destructive',
+    //   });
+
+    // } finally {
+
+    //   console.log('We do cleanup here');
+    // }
+
+    // await supabase.auth
+    //   .signInWithPassword({
+    //     email: values.email,
+    //     password: values.password,
+    //   })
+    //   .then(
+    //     () => {
+    //       toast({
+    //         title: 'You logged in successfully',
+    //         description: 'welcome to lichat',
+    //       });
+    //       router.push('/');
+    //       onSuccess();
+    //     },
+    //     (error: ResponseError) => {
+    //       // An error occured
+    //       if (error.response === undefined) {
+    //         // No response from server
+    //       } else {
+    //         const server_response = error.response;
+    //         toast({
+    //           title: 'There was a problem with your login',
+    //           description: 'Please try again',
+    //           variant: 'destructive',
+    //         });
+    //       }
+
+    //       if (error.status === undefined) {
+    //         // No HTTP status code
+    //       } else {
+    //         const http_code = error.status;
+    //         // Further processing ..
+    //       }
+    //     }
+    //   );
+    // supabase.auth
+    //   .signInWithPassword({
+    //     email: values.email,
+    //     password: values.password,
+    //   })
+    //   .then((data) => {
+    //     console.log(data);
+    //     toast({
+    //       title: 'You logged in successfully',
+    //       description: 'welcome to lichat',
+    //     });
+    //     router.push('/');
+    //     onSuccess();
+    //   })
+    //   .catch((error) => {
+    //     toast({
+    //       title: 'There was a problem with your login',
+    //       description: 'Please try again',
+    //       variant: 'destructive',
+    //     });
+    //   });
   };
 
   return (

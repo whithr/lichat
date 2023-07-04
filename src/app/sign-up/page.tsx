@@ -1,5 +1,5 @@
 'use client';
-import SignIn from '@/components/SignIn';
+import SignUp from '@/components/SignUp';
 import Link from 'next/link';
 
 export default function page() {
@@ -10,7 +10,7 @@ export default function page() {
           Home
         </Link>
 
-        <SignIn onSuccess={() => undefined} />
+        <SignUp onSuccess={() => undefined} />
       </div>
     </div>
   );

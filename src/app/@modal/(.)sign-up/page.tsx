@@ -1,5 +1,5 @@
 'use client';
-import SignIn from '@/components/SignIn';
+import SignUp from '@/components/SignUp';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -21,7 +21,7 @@ export default function Page() {
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogContent>
-        <SignIn onSuccess={() => router.back()} />
+        <SignUp onSuccess={() => router.back()} />
       </DialogContent>
     </Dialog>
   );

@@ -4,7 +4,8 @@ import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useEffect, useState } from 'react';
 import type { Database } from '@/lib/database.types';
 
-type User = Database['public']['Tables']['user_profiles']['Row'];
+type User = Database['public']['Tables']['users']['Row'];
+export type Board = Database['public']['Tables']['boards']['Row'];
 
 export const Users = () => {
   const [users, setUsers] = useState<User[] | null>(null);
