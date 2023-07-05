@@ -1,21 +1,37 @@
 import { Board } from '@/components/Users';
 import useSupabase from '@/hooks/useSupabase';
-import { addBoard, getBoard, getBoards, updateBoard } from '@/queries/boards';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  addBoard,
+  getBoardById,
+  getBoardByName,
+  getBoards,
+  updateBoard,
+} from '@/queries/boards';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
-export const useGetBoardQuery = (boardId: number) => {
+export const useGetBoardByIdQuery = (boardId: number) => {
   const client = useSupabase();
   const key = [`get-board-by-id`, boardId];
 
   return useQuery(key, async () => {
-    return getBoard(client, boardId).then((result) => result.data);
+    return getBoardById(client, boardId).then((result) => result.data);
   });
 };
+
+export function useGetBoardByNameQuery(name: string) {
+  const client = useSupabase();
+  const key = ['get-board-by-name', name];
+
+  return useQuery({
+    queryKey: key,
+    queryFn: async () =>
+      getBoardByName(client, name).then((result) => result.data),
+  });
+}
 
 export const useGetBoardsQuery = () => {
   const client = useSupabase();
   const key = ['get-all-boards'];
-  console.log('calling get all boards');
 
   return useQuery(key, async () => {
     return getBoards(client).then((result) => result.data);

@@ -4,11 +4,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
   useAddBoardMutation,
-  useGetBoardQuery,
   useGetBoardsQuery,
 } from '@/hooks/api/useBoardQuery';
 import { useClientSession } from '@/hooks/useClientSession';
-import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -16,18 +14,9 @@ const Page = () => {
   const [input, setInput] = useState<string>('');
   const router = useRouter();
 
-  const { data: board, isLoading, isError } = useGetBoardQuery(1);
-  const {
-    data: allBoards,
-    isLoading: isBoardLoading,
-    isError: isBoardError,
-  } = useGetBoardsQuery();
+  const { data: allBoards } = useGetBoardsQuery();
   const addBoardMutation = useAddBoardMutation();
   const { session } = useClientSession();
-  const client = useQueryClient();
-
-  console.log(allBoards);
-  console.log(session);
 
   const handleCreateBoard = () => {
     if (!input && !session) {
@@ -45,7 +34,6 @@ const Page = () => {
       },
       {
         onSuccess: () => {
-          client.invalidateQueries(['get-all-boards']);
           router.push(`/li/${input}`);
         },
       }

@@ -1,16 +1,36 @@
 import { Board } from '@/components/Users';
 import { SupabaseClient } from '@supabase/supabase-js';
 
-export const getBoard = (client: SupabaseClient, boardId: number) => {
+export const getBoardById = (client: SupabaseClient, boardId: number) => {
   return client
     .from('boards')
     .select(
       `
         id,
-        name
+        name,
+        inserted_at,
+        created_by, 
+        posts ( id, title )
       `
     )
     .eq('id', boardId)
+    .throwOnError()
+    .single();
+};
+
+export const getBoardByName = (client: SupabaseClient, name: string) => {
+  return client
+    .from('boards')
+    .select(
+      `
+      id, 
+      name,
+      inserted_at,
+      created_by, 
+      posts ( id, title, comments (id, content))
+    `
+    )
+    .eq('name', name)
     .throwOnError()
     .single();
 };
@@ -52,7 +72,6 @@ export const addBoard = async (
     data: Partial<Board>;
   }
 ) => {
-  console.log(params);
   return client
     .from('boards')
     .insert({ name: params.data.name, created_by: params.data.created_by })

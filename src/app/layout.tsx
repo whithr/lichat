@@ -7,10 +7,10 @@ import { Toaster } from '@/components/ui/toaster';
 import { ModalProvider } from '@/components/ModalProvider';
 import Providers from '@/components/Providers';
 
-// export const metadata = {
-//   title: 'lichat',
-//   description: 'front page of the internet',
-// };
+export const metadata = {
+  title: 'lichat',
+  description: 'front page of the internet',
+};
 
 const inter = Inter({ subsets: ['latin'] });
 
